@@ -1,12 +1,24 @@
 import { useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import TaskList from './Pages/TaskList'
+import AddTask from './Pages/AddTask'
+import { AppLayout } from './LayOut/AppLayout'
 
 
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
     <>
-      
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AppLayout/>}>
+            <Route path='/tasklist' element={<TaskList />} />
+            <Route path='/tasklist/create' element={<AddTask />} />
+
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
