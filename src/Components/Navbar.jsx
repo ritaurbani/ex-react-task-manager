@@ -5,11 +5,11 @@ const Navbar = () => {
 
     const navLinks = [
         {
-            path: "/tasklist",
+            path: "/",
             title: "TaskList"
         },
         {
-            path: "/tasklist/create",
+            path: "/addtask",
             title: "AddTask"
         }
     ]
@@ -18,7 +18,6 @@ const Navbar = () => {
   return (
     <div>
         <nav className='navBar'>
-            <h3>Task Manager</h3>
             <ul>
                 {
                     navLinks.map((curLink, index) => (
@@ -29,6 +28,7 @@ const Navbar = () => {
                 }
             </ul>
         </nav>
+          <h3>Task Manager</h3>
     </div>
   )
 }

@@ -13,8 +13,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<AppLayout/>}>
-            <Route path='/tasklist' element={<TaskList />} />
-            <Route path='/tasklist/create' element={<AddTask />} />
+            <Route path='/' element={<TaskList />} />
+            <Route path='/addtask' element={<AddTask />} />
 
           </Route>
         </Routes>
