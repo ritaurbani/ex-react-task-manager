@@ -1,18 +1,35 @@
 
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     height: 60px;
+    font-family: 'Poppins';
 }
 
 .navBar{
     display: flex;
+    align-items: center;
+        /* This vertically centers the children */
     background-color: #C4E4C7;
+        
 }
 
 .navBar ul {
     display: flex;
-    gap: 10px;
+    
+    gap: 20px;
     list-style-type: none  
+}
+
+.navBar ul li a{
+    text-decoration: none;
+    line-height: 60px;
+        /* Matches navbar height */   
+}
+
+a.active {
+    color:darkblue;
 }
