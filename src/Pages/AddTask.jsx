@@ -29,44 +29,63 @@ const AddTask = () => {
     const symbols = "!@#$%^&*()-_=+[]{}|;:'\\,.<>?/`~";
 
     const isTitleValid = () => {
-        if(!title.trim()) return
-    if(title.split("").some((char) => symbols.includes(char))){
-    return "contiene simboli non validi"}
-    return null
+        if (!title.trim()) {
+            return false
+        }
+        console.log(title.split(""))
+        const titleAsArray = title.split("")
+        const doesTitleContainSymbols = titleAsArray.some((char) => symbols.includes(char))
+        if (doesTitleContainSymbols) {
+            return false
+        }
+
+        return true
     }
 
-    const 
+    const titleValid = isTitleValid()
+
+    const addTask = (e) => {
+        e.preventDefault()
+        const description = textRef.current.value
+        const status = selectRef.current.value
+        console.log({
+            title,
+            description,
+            status
+        })
+    }
+
+   
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className="form" onSubmit={addTask}>
             {/* Nome del task */}
             <input
                 type="text"
                 placeholder='title'
-                name='title'
                 value={title}
                 onChange={(e) => setTitle(e.target.value)} />
             {/* Ha senso mostrarlo solo se ho scritto e non e stringa vuota */}
-            {title.trim() && (
+            {!titleValid && (
                 <p>
-                    {isTitleValid()? "title valid": "Title must not contain symbols"}
+                    "Title must not be empty and must not contain symbols"
                 </p>
             )}
             {/* Description del task */}
-            <textarea>
+            <textarea
                 type="text"
-                name='title'
-                ref = {textRef}
+                placeholder='description'
+                name='description'
+                ref={textRef}>
             </textarea>
             {/* Stato del task */}
-            <select name="" id="" ref={selectRef
-
-            }>
-                <option value="">"To do"</option>
-                <option value="">"Doing"</option>
-                <option value="">"Done"</option>
+            <select ref={selectRef}>
+                <option value="To do">"status"</option>
+                <option value="To do">"To do"</option>
+                <option value="Doing">"Doing"</option>
+                <option value="Done">"Done"</option>
             </select>
-            <button onClick={addTask}>"Aggiungi Task</button>
+            <button type='submit'>Aggiungi Task</button>
         </form>
     )
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { useContext } from 'react'
 import { GlobalContext } from '../Context/GlobalContext'
 import TaskRow from '../Components/TaskRow'
+import AddTask from './AddTask'
 
 const TaskList = () => {
 
@@ -25,6 +26,7 @@ const TaskList = () => {
                     {tasks.map((curTask) => (
                         <TaskRow key={curTask.id} task={curTask} />
                     ))}
+          
 
                 </tbody>
             </table>
