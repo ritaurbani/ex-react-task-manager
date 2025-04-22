@@ -28,7 +28,7 @@ const Navbar = () => {
                 }
             </ul>
         </nav>
-          <h3>Task Manager</h3>
+          {/* <h3>Task Manager</h3> */}
     </div>
   )
 }

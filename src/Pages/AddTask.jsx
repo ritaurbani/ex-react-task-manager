@@ -12,6 +12,7 @@ import { useRef } from 'react'
 // La funzione viene ricalcolata ad ogni render(anche se username non cambia).
 // Con useMemo invece, il calcolo avviene solo quando username cambia.
 const AddTask = () => {
+    const {addTask} = useContext(GlobalContext)
 
     //Note: mano a mano che scriviamo value all interno dell input react non rirenderizza pagina > console.log(rerender)
     //prima volta al mounting pagina si
@@ -48,16 +49,28 @@ const AddTask = () => {
 
     const titleValid = isTitleValid()
 
-    const addTask = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         const description = textRef.current.value
         const status = selectRef.current.value
+        if(!isTitleValid){
+            return
+        }
         const newTask = {
             title: title.trim(),
             description,
             status
         }
-        console.log("New Task", newTask)
+       //M6-try deve effettuare l addTask > devo importarmelo
+        try{
+            await addTask(newTask)
+            alert("Task succesfully created")
+            setTitle("")//reset title
+            const description = ""
+            const status=""
+        }catch(error){
+            alert(error.message)
+        }
     }
 
 
@@ -65,7 +78,7 @@ const AddTask = () => {
     return (
         <div>
             {/* <h2>Add a task</h2> */}
-            <form className="form" onSubmit={addTask}>
+            <form className="form" onSubmit={handleSubmit}>
                 {/* Nome del task */}
                 <label >
                     Task name
