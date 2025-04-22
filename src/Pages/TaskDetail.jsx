@@ -1,14 +1,16 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { GlobalContext } from '../Context/GlobalContext'
 import { useContext, useState, useEffect } from 'react'
+
 
 
 const TaskDetail = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
     const {id} = useParams()
-    const {tasks} = useContext(GlobalContext)
+    const {tasks, removeTask} = useContext(GlobalContext)
+    const  navigate  = useNavigate()
 
     //per no fare altra chiamata API non necessaria
     //id catturato nello useParams - Params ritorna una stringa, quindi dobbiamo fare parseInt
@@ -20,11 +22,19 @@ const TaskDetail = () => {
         )
     }
 
-    const handleDelete = () => {
-        console.log("remove task", task.id)
+    //questa e asincrona perche removeTask e asincrona
+    const handleDelete = async(id) => {
+        try{//await perche removeTask e`un operazione asincrona 
+            await removeTask(task.id)
+            alert("Task has been successfully eliminated")
+            navigate("/")
+        }catch(error){
+            console.error(error)
+            alert(error.message)
+        }
     }
 
-    //se arriva qui task esiste  e procede con il render normale
+    //se arriva qui task esiste e procede con il render normale
   return (
     <div>
         <p><strong>Name:</strong>{task.title} </p>

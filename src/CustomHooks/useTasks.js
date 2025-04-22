@@ -43,9 +43,19 @@ const [tasks, setTasks] = useState([])
      setTasks(prev => [...prev, result.task])
     }
 
-    const removeTask = (taskid) => {
-
+    const removeTask = async (taskId) => {
+      const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
+        method: "DELETE",
+      })
+      //const {success, message} = await response.json()
+      const result = await response.json()
+      if(!result.success){
+        throw new Error(result.message)
+      }//rispetto allo stato precedente prendo lo stato filtrato..
+      //quello da eliminare non viene mantenuto nell array filtrato
+      setTasks(prev => prev.filter((task, i) => task.id !== taskId ))
     }
+
     const updateTask = (updatedtask) => {
 
     }
