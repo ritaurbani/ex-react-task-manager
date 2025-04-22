@@ -34,7 +34,30 @@ a.active {
     color:darkblue;
 }
 
-.form{
+.form {
+    
     margin-top: 50px;
-  
+    /* display: flex; */
+    
 }
+
+input, textarea, select{
+    display: block;
+    margin: 20px;
+    width: 300px;
+    border-radius: 10px;
+}
+
+p {
+    height: 20px;
+    font-size: small;
+    margin-right: 20px;
+    text-align: start;
+}
+
+.add-btn {
+    margin: 20px;
+    border-radius: 10px;
+    padding: 10px;
+}
+

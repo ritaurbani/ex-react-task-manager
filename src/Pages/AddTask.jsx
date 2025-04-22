@@ -28,6 +28,10 @@ const AddTask = () => {
 
     const symbols = "!@#$%^&*()-_=+[]{}|;:'\\,.<>?/`~";
 
+    //Se l'utente inserisce soli spazi in un campo, 
+    // il tuo primo codice lo considererebbe comunque valido:
+    //if (name) controlla solo che name non sia null, 
+    // undefined o "", ma non vede gli spazi come vuoti!
     const isTitleValid = () => {
         if (!title.trim()) {
             return false
@@ -48,45 +52,58 @@ const AddTask = () => {
         e.preventDefault()
         const description = textRef.current.value
         const status = selectRef.current.value
-        console.log({
-            title,
+        const newTask = {
+            title: title.trim(),
             description,
             status
-        })
+        }
+        console.log("New Task", newTask)
     }
 
-   
+
 
     return (
-        <form className="form" onSubmit={addTask}>
-            {/* Nome del task */}
-            <input
-                type="text"
-                placeholder='title'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)} />
-            {/* Ha senso mostrarlo solo se ho scritto e non e stringa vuota */}
-            {!titleValid && (
-                <p>
-                    "Title must not be empty and must not contain symbols"
-                </p>
-            )}
-            {/* Description del task */}
-            <textarea
-                type="text"
-                placeholder='description'
-                name='description'
-                ref={textRef}>
-            </textarea>
-            {/* Stato del task */}
-            <select ref={selectRef}>
-                <option value="To do">"status"</option>
-                <option value="To do">"To do"</option>
-                <option value="Doing">"Doing"</option>
-                <option value="Done">"Done"</option>
-            </select>
-            <button type='submit'>Aggiungi Task</button>
-        </form>
+        <div>
+            {/* <h2>Add a task</h2> */}
+            <form className="form" onSubmit={addTask}>
+                {/* Nome del task */}
+                <label >
+                    Task name
+                    <input
+                        type="text"
+                        placeholder='title'
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)} />
+                </label>
+                {/* Ha senso mostrarlo solo se ho scritto e non e stringa vuota */}
+                {!titleValid && (
+                    <p style={{ color: titleValid ? "green" : "red" }}>
+                        "Title must not be empty and must not contain symbols"
+                    </p>
+                )}
+                {/* Description del task */}
+                <label htmlFor="">
+                    Task description
+                    <textarea
+                        type="text"
+                        placeholder='description'
+                        name='description'
+                        ref={textRef}>
+                    </textarea>
+                </label>
+                {/* Stato del task */}
+                <label>
+                    Status:
+                    <select ref={selectRef}>
+                        <option value="To do">"status"</option>
+                        <option value="To do">"To do"</option>
+                        <option value="Doing">"Doing"</option>
+                        <option value="Done">"Done"</option>
+                    </select>
+                </label>
+                <button className="add-btn" type='submit'>Aggiungi Task</button>
+            </form>
+        </div>
     )
 }
 
