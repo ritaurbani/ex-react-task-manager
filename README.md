@@ -144,3 +144,76 @@ useEffect(() => {
 if (loading) return <div>Caricamento...</div>;
 if (error) return <h2>{error}</h2>;
 if (!task) return <h2>Task non trovato</h2>;
+
+///////////////////////////
+
+--taskDetail --RemoveTask
+
+1. Prima Versione: removeTask (Funzione "pura")
+javascript
+const removeTask = async (taskId) => {
+  // 1. Chiamata API
+  const response = await fetch(`${apiUrl}/tasks/${taskId}`, { method: "DELETE" });
+  
+  // 2. Leggi la risposta
+  const result = await response.json();
+
+  // 3. Se l'API segnala un errore, LANCIA l'errore
+  if (!result.success) {
+    throw new Error(result.message); // ⚠️ Non gestisci qui, passi il problema al chiamante
+  }
+
+  // 4. Se tutto ok, aggiorna lo stato
+  setTasks(prev => prev.filter(task => task.id !== taskId));
+};
+
+Cosa hai fatto qui:
+
+Creata una funzione riutilizzabile che:
+
+Fa una richiesta API.
+
+Non gestisce UI (alert, navigate, ecc.).
+
+Lancia errori per il chiamante (throw).
+
+2. Seconda Versione: handleDelete (Gestione UI)
+javascript
+const handleDelete = async (id) => {
+  try {
+    // 1. Chiama removeTask (operazione asincrona)
+    //Il codice si "ferma" qui finché removeTask non termina
+    //senza await alert sarebbe mostrato prima che l'operazione finisca).
+
+    await removeTask(task.id); // 🔹 Aspetta il completamento
+
+    // 2. Se removeTask ha successo:
+    alert("Task has been successfully eliminated"); // UI feedback
+    navigate("/"); // Reindirizzamento
+
+  } catch (error) {
+    // 3. Se removeTask fallisce:
+    console.error(error); // Log tecnico
+    alert(error.message); // Feedback all'utente
+  }
+};
+Perché questa evoluzione?
+
+Separazione dei compiti:
+
+removeTask: Si occupa solo della logica cruda (API + stato).
+
+handleDelete: Gestisce il flusso UI (feedback, navigazione).
+
+Maggiore controllo:
+
+Ora puoi decidere nel componente come reagire agli errori (es. alert, toast, navigate).
+
+DIVISION OF TASK
+Cosa succede in await removeTask(task.id)?
+removeTask è una funzione separata (definita altrove, ad esempio in un context/hook).
+
+handleDelete la chiama per delegare il lavoro sporco (API + aggiornamento stato).
+
+await aspetta che removeTask finisca tutto il suo lavoro prima di procedere.
+
