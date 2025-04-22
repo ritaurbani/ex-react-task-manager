@@ -13,7 +13,7 @@ const TaskDetail = () => {
     //per no fare altra chiamata API non necessaria
     //id catturato nello useParams - Params ritorna una stringa, quindi dobbiamo fare parseInt
     const task = tasks.find(t => t.id === parseInt(id))
-    //se find ritorna undefined
+    //se find ritorna undefined ritorna subito html e interrompi
     if(!task){
         return (
             <h2>Task non trovato</h2>
@@ -24,6 +24,7 @@ const TaskDetail = () => {
         console.log("remove task", task.id)
     }
 
+    //se arriva qui task esiste  e procede con il render normale
   return (
     <div>
         <p><strong>Name:</strong>{task.title} </p>
