@@ -3,13 +3,15 @@ import Modal from './Modal'
 
 const EditTaskModal = ({ show, onClose, task, onSave }) => {
 
-    const formRef = useRef()
+    const formRef = useRef()//riferimento al form
 
     const [updatedTask, setUpdatedTask] = useState(task)
 
     const { title, description, status } = updatedTask;
 
-
+//key: Il campo da modificare(title, description, status)
+//event.target.value: Il nuovo valore
+//Crea un nuovo oggetto mantenendo tutte le proprietà tranne quella modificata
     const changeUpdatedTask = (key, event) => {
         //modifichiamo updatedTask => mantenendo tutte le sue proprieta tranne quella con key title oppure key description....
         //key(title, description..) verranno modificate in e.target.value passato
@@ -67,6 +69,7 @@ const EditTaskModal = ({ show, onClose, task, onSave }) => {
                 //qui dentro dobbiamo prendere form e fare un submit senza avere al suo interno un bottone
                 //con il metodo scateno il suo event obbligo form ad andare in submit
                 //ecco che parte la funzione handleSubmit
+                //onConfirm: Simula il submit del form quando si clicca "Salva"
                 onConfirm={() => formRef.current.requestSubmit()} />
         </div>
     )
