@@ -1,21 +1,28 @@
 import React from 'react'
+import {createPortal} from 'react-dom'
 
 function Modal({
     title,
     content,
-    show = false,
-    onClose = () => { },
-    onConfirm = () => { },
+    show,
+    onClose,
+    onConfirm,
     confirmText = "Conferma"
 }) {
 
-    return show && createPortal(
+    // if(!show) return null
+
+
+    return show && createPortal(//passiamo il componente(div), e dove vogliamo creare(document.body)
+        //overlay che copre tutto in position fixed
         <div className='modal-container'>
+            {/* //effetivamente la nostra modale centrata nell overlay*/}
             <div className='modal'>
                 <h2>{title}</h2>
+                {/* //puoi mettere content loose senza p */}
                 <p>{content}</p>
                 <div>
-                    <button onClick={onClose}>{Annulla}</button>
+                    <button onClick={onClose}>Annulla</button>
                     <button onClick={onConfirm}>{confirmText}</button>
                 </div>
             </div>

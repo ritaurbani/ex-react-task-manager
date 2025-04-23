@@ -13,6 +13,8 @@ const TaskDetail = () => {
     const {tasks, removeTask} = useContext(GlobalContext)
     const  navigate  = useNavigate()
 
+    //MODAL
+    const [show, setShow] = useState(false)
 
 
     //per no fare altra chiamata API non necessaria
@@ -45,11 +47,20 @@ const TaskDetail = () => {
           <p><strong>Description:</strong>{task.description} </p>
           <p><strong>Status:</strong>{task.status} </p>
           <p><strong>Data di Creazione:</strong>{new Date(task.createdAt).toLocaleDateString()} </p>
-        <button onClick={handleDelete}>Elimina Task</button>
+        <button onClick={() => setShow(true)}>Elimina Task</button>
         <Modal
+            title = {task.title}
+            content="New Task successfully added" //{<p>Sei sicuro che vuoi eliminare il task?</p>}
+            show={show}
+            onClose = {() => setShow(false)}
+            onConfirm={handleDelete}
+            confirmText='Conferma Elimina'
         />
     </div>
   )
 }
 
 export default TaskDetail
+
+// Quando l’utente clicca su "Elimina Task", deve aprirsi la modale di conferma.
+// Se l’utente conferma, vengono eseguite le stesse operazioni della Milestone 8.
