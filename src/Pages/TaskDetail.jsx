@@ -46,7 +46,8 @@ const TaskDetail = () => {
           <p><strong>Status:</strong>{task.status} </p>
           <p><strong>Data di Creazione:</strong>{new Date(task.createdAt).toLocaleDateString()} </p>
         <button onClick={handleDelete}>Elimina Task</button>
-        <Modal/>
+        <Modal
+        />
     </div>
   )
 }

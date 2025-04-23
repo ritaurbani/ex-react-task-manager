@@ -3,23 +3,25 @@ import React from 'react'
 function Modal({
     title,
     content,
-    show,
-    onClose,
-    onConfirm,
+    show = false,
+    onClose = () => { },
+    onConfirm = () => { },
     confirmText = "Conferma"
 }) {
 
-    const [show, setShow] = useState(false)
-
-
-  return (
-    <div>
-        <h2>{title}</h2>
-        <p>{content}</p>
-        <button onClose={() => setShow(false)}>{Annulla}</button>
-        <button onClose={confirm}>{confirmText}</button>
-    </div>
-  )
+    return show && createPortal(
+        <div className='modal-container'>
+            <div className='modal'>
+                <h2>{title}</h2>
+                <p>{content}</p>
+                <div>
+                    <button onClick={onClose}>{Annulla}</button>
+                    <button onClick={onConfirm}>{confirmText}</button>
+                </div>
+            </div>
+        </div>,
+        document.body//abbiamo creato portal che passiamo al body-posizionamento modale sara al di sopra
+    )
 }
 
 export default Modal
