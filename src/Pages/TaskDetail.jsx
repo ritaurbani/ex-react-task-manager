@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { GlobalContext } from '../Context/GlobalContext'
 import { useContext, useState, useEffect } from 'react'
 import Modal from '../Components/Modal'
+import EditTaskModal from '../Components/EditTaskModal'
 
 
 
@@ -10,11 +11,12 @@ const TaskDetail = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
     const {id} = useParams()
-    const {tasks, removeTask} = useContext(GlobalContext)
+    const {tasks, removeTask, updateTask} = useContext(GlobalContext)
     const  navigate  = useNavigate()
 
     //MODAL
-    const [show, setShow] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [showEditModal, setShowEditModal] = useState(false)
 
 
     //per no fare altra chiamata API non necessaria
@@ -31,9 +33,19 @@ const TaskDetail = () => {
     const handleDelete = async(id) => {
         try{//await perche removeTask e`un operazione asincrona 
             await removeTask(task.id)
-            setShow(true)
+            setShowDeleteModal(true)
             alert("Task has been successfully eliminated")
             navigate("/")
+        }catch(error){
+            console.error(error)
+            alert(error.message)
+        }
+    }
+
+    const handleUpdate = async (updatedTask) => {
+        try{
+            await updateTask(updatedTask)
+            setShowEditModal(false)
         }catch(error){
             console.error(error)
             alert(error.message)
@@ -47,15 +59,22 @@ const TaskDetail = () => {
           <p><strong>Description:</strong>{task.description} </p>
           <p><strong>Status:</strong>{task.status} </p>
           <p><strong>Data di Creazione:</strong>{new Date(task.createdAt).toLocaleDateString()} </p>
-        <button onClick={() => setShow(true)}>Elimina Task</button>
+        <button onClick={() => setShowDeleteModal(true)}>Elimina Task</button>
+        <button onClick={() => setShowEditModal(true)}>Modifica Task</button>
         <Modal
             title = {task.title}
             content="New Task successfully added" //{<p>Sei sicuro che vuoi eliminare il task?</p>}
-            show={show}
-            onClose = {() => setShow(false)}
+            show={showDeleteModal}
+            onClose = {() => setShowDeleteModal(false)}
             onConfirm={handleDelete}
             confirmText='Conferma Elimina'
         />
+        <EditTaskModal
+        task={task}
+        show={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        //ci dice se il bottone salva e stato cliccato
+        onSave={handleUpdate}/>
     </div>
   )
 }
