@@ -75,6 +75,7 @@ const TaskDetail = () => {
         onClose={() => setShowEditModal(false)}
         //ci dice se il bottone salva e stato cliccato
         onSave={handleUpdate}/>
+        
     </div>
   )
 }

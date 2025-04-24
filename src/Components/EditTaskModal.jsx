@@ -6,6 +6,7 @@ const EditTaskModal = ({ show, onClose, task, onSave }) => {
     const formRef = useRef()//riferimento al form
 
     const [updatedTask, setUpdatedTask] = useState(task)
+    console.log(updatedTask)
 
     const { title, description, status } = updatedTask;
 

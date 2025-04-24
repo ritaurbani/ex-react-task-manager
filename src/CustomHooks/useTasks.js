@@ -56,18 +56,22 @@ const [tasks, setTasks] = useState([])
       setTasks(prev => prev.filter((task, i) => task.id !== taskId ))
     }
 
-    //deve prendere l id della task modificata ed effettuare il put con tutto l oggetto
+    //RICEZIONE DATI INPUT - deve prendere l id della task modificata ed effettuare il put con tutto l oggetto
     const updateTask = async(updatedTask) => {//riceve un oggetto updatedTask
       const response = await fetch(`${apiUrl}/tasks/${updatedTask.id}`, {
         method: 'PUT',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedTask)//Convertiamo l'oggetto in JSON-passarlo cosi quando usiamo fetch
       })
-      const result = await response.json()
+      //GESTISCO RISPOSTA - (ogggetto con success; tru, task aggiornato)
+      const result = await response.json()//dati in formato json
       if(!result.success){
         throw new Error(result.message)
       }
-      //per ogni task controlliamo se e uguale alla task ritornata, in quel caso 
+      //AGGIORNO STATO DOPO RISPOSTA - SE success is true aggiornare task in stato globale
+      //per ogni task controlliamo se e uguale alla task ritornata dal server(stesso id), in quel caso 
+      //sostituiamo la task esistente con la nuova versione (result.task)
+      //map ritorno nuovo array con qualche elemento modificato
       setTasks(prev => prev.map((t, i) => t.id ===result.task.id? result.task : t))
     }
 
