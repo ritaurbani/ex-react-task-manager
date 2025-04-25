@@ -12,6 +12,7 @@ const TaskList = () => {
     const [sortBy, setSortBy] = useState("createdAt")
     //rappresenta la direzione (1 per crescente, -1 per decrescente)
     const [sortOrder, setSortOrder] = useState(1)
+    const [searchQuery, setSearchQuery] = useState("")
 
 
     const handleSorting = (colName) => {//scopo modificare stato non ritorna nulla-onClick/onChange spesso non ritoenano nulla
@@ -23,30 +24,66 @@ const TaskList = () => {
         }
     }
 
-    const sortedTasks = useMemo(() => {// ritornare versione ordinata delle tasks
-        return [...tasks].sort((a,b) => {
-            if(sortBy === "title") {
-              return  a.title.localeCompare(b.title) * sortOrder
-        }  else if (
-            sortBy === "status"
-        ) {
-               const statusOptions = ["To do", "Doing", "Done"] //vedo dove ci troviamo > indice
-               //valori numerici sono gli indici a cui appartengono gli status nell array
-              return  (statusOptions.indexOf(a.status) - statusOptions.indexOf(b.status))* sortOrder
-                  } else if (
-            sortBy === "createdAt"
-        ) {
-                const timestampA = new Date(a.createdAt).getTime(); // Numero (es. 1672531200000)
-                const timestampB = new Date(b.createdAt).getTime();
-                return (timestampA - timestampB) * sortOrder;
-        }
+    // const filteredTasks = useMemo(() => {
+    //   return tasks.filter((t) =>
+    //     t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //     t.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //     t.createdAt.includes(searchQuery)
+    //   )
+    // }, [tasks, searchQuery])
 
-}) }, [tasks, sortBy, sortOrder])
+    //scopo: 
+    //Sprechi risorse: Se searchQuery cambia, ri-filtri ma poi ri-ordini da capo
+    //  anche se sortBy/sortOrder non sono cambiati.
+    // Un singolo useMemo che: Filtra i task(searchQuery).
+    // Ordina i task filtrati(sortBy / sortOrder).
+
+//     const sortedTasks = useMemo(() => {// ritornare versione ordinata delle tasks
+//         return [...tasks].sort((a,b) => {
+//             if(sortBy === "title") {
+//               return  a.title.localeCompare(b.title) * sortOrder
+//         }  else if (
+//             sortBy === "status"
+//         ) {
+//                const statusOptions = ["To do", "Doing", "Done"] //vedo dove ci troviamo > indice
+//                //valori numerici sono gli indici a cui appartengono gli status nell array
+//               return  (statusOptions.indexOf(a.status) - statusOptions.indexOf(b.status))* sortOrder
+//                   } else if (
+//             sortBy === "createdAt"
+//         ) {
+//                 const timestampA = new Date(a.createdAt).getTime(); // Numero (es. 1672531200000)
+//                 const timestampB = new Date(b.createdAt).getTime();
+//                 return (timestampA - timestampB) * sortOrder;
+//         }
+
+// }) }, [tasks, sortBy, sortOrder])
+
+    const filteredAndSortedTasks = useMemo(() => {
+        // 1. Filtra i task basandoti su searchQuery (case insensitive)
+        const filtered = tasks.filter(task =>
+            task.title.toLowerCase().includes(searchQuery.toLowerCase()) // Cerca nel titolo
+            || task.status.toLowerCase().includes(searchQuery.toLowerCase()) // Cerca nello status
+            || task.createdAt.toLocaleString().includes(searchQuery)
+        );
+
+        // 2. Ordina i task filtrati (usa il tuo codice esistente)
+        return [...filtered].sort((a, b) => {
+            if (sortBy === "title") return a.title.localeCompare(b.title) * sortOrder;
+            else if (sortBy === "status") /* ... */;
+            else if (sortBy === "createdAt") /* ... */;
+        });
+    }, [tasks, searchQuery, sortBy, sortOrder]); // Dipendenze: tutte le variabili usate
 
 
 
     return (
         <div>
+            <div>
+                <input type=""
+                placeholder='Search for the task'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)} />
+            </div>
             <table className='task-table'>
                 {/* ci dovra essere almeno una riga (tr) */}
                 {/* th rappresenta il nome della proprieta mostrata e intestazione nostra colonna */}
@@ -58,7 +95,7 @@ const TaskList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {sortedTasks.map((curTask) => (
+                    {filteredAndSortedTasks.map((curTask) => (
                         <TaskRow key={curTask.id} task={curTask} />
                     ))}
           
