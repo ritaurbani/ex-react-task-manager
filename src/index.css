@@ -30,6 +30,35 @@
         /* Matches navbar height */   
 }
 
+/* ///////////table/////////// */
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    margin: 20px 0;
+}
+
+.task-table th,
+.task-table td {
+    border: 1px solid #ccc;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.task-table thead {
+    background-color: #f4f4f4;
+}
+
+.task-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.task-table tbody tr:hover {
+    background-color: #e6f7ff;
+}
+
+/* ///////////////////////////// */
+
 a.active {
     color:darkblue;
 }
