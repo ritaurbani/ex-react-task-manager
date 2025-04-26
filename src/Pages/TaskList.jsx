@@ -1,8 +1,19 @@
 import React from 'react'
-import { useContext, useState, useMemo } from 'react'
+import { useContext, useState, useMemo, useCallback } from 'react'
 import { GlobalContext } from '../Context/GlobalContext'
 import TaskRow from '../Components/TaskRow'
 import AddTask from './AddTask'
+
+function debounce(callback, delay){
+    let timer;
+    return(value) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            callback(value)
+        }, delay)
+    }
+}
+
 
 const TaskList = () => {
 
@@ -58,6 +69,7 @@ const TaskList = () => {
 
 // }) }, [tasks, sortBy, sortOrder])
 
+//useMemo: Reagisce al cambiamento di searchQuery filtrando/ordinando.
     const filteredAndSortedTasks = useMemo(() => {
         // 1. Filtra i task basandoti su searchQuery (case insensitive)
         const filtered = tasks.filter(task =>
@@ -74,15 +86,19 @@ const TaskList = () => {
         });
     }, [tasks, searchQuery, sortBy, sortOrder]); // Dipendenze: tutte le variabili usate
 
-
+    //const debounceSearch = debounce(setSearchQuery, 500)  non va bene perche viene ricreato ad ogni render e timer non e memorizzato
+    
+    const debounceSetSearchQuery = useCallback(//callback da memorizzare e ricreare solo al cambio di dipendenze, vogliamo passare la funzione ritornata da debounce per salvarla
+        debounce((value) => 
+            setSearchQuery(value), 
+        300),[])
 
     return (
         <div>
             <div>
                 <input type=""
                 placeholder='Search for the task'
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)} />
+                    onChange={(e) => debounceSetSearchQuery(e.target.value)} />
             </div>
             <table className='task-table'>
                 {/* ci dovra essere almeno una riga (tr) */}
