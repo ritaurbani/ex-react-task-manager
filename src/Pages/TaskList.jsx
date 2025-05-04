@@ -19,6 +19,8 @@ const TaskList = () => {
 
     const { tasks } = useContext(GlobalContext)
     console.log(tasks)
+
+
     //rappresenta il criterio di ordinamento (title, status, createdAt).
     const [sortBy, setSortBy] = useState("createdAt")
     //rappresenta la direzione (1 per crescente, -1 per decrescente)
@@ -26,69 +28,39 @@ const TaskList = () => {
     const [searchQuery, setSearchQuery] = useState("")
 
 
-    const handleSorting = (colName) => {//scopo modificare stato non ritorna nulla-onClick/onChange spesso non ritoenano nulla
+    const handleSorting = (colName) => {
         if (sortBy === colName){
-       setSortOrder(-sortOrder) //inverte l ordine - se uso ! lo tratto come booleano ma e un numero  
-    }else{//questi setter rirenderizzano componente notificando a react che lo stato e cambiato
-        setSortBy(colName)//imposto nuova colonna
-           setSortOrder(1)//resetto ordine a crescente
+       setSortOrder(-sortOrder) 
+    }else{
+        setSortBy(colName)//nuova colonna
+           setSortOrder(1)
         }
     }
 
-    // const filteredTasks = useMemo(() => {
-    //   return tasks.filter((t) =>
-    //     t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //     t.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //     t.createdAt.includes(searchQuery)
-    //   )
-    // }, [tasks, searchQuery])
 
-    //scopo: 
-    //Sprechi risorse: Se searchQuery cambia, ri-filtri ma poi ri-ordini da capo
-    //  anche se sortBy/sortOrder non sono cambiati.
-    // Un singolo useMemo che: Filtra i task(searchQuery).
-    // Ordina i task filtrati(sortBy / sortOrder).
-
-//     const sortedTasks = useMemo(() => {// ritornare versione ordinata delle tasks
-//         return [...tasks].sort((a,b) => {
-//             if(sortBy === "title") {
-//               return  a.title.localeCompare(b.title) * sortOrder
-//         }  else if (
-//             sortBy === "status"
-//         ) {
-//                const statusOptions = ["To do", "Doing", "Done"] //vedo dove ci troviamo > indice
-//                //valori numerici sono gli indici a cui appartengono gli status nell array
-//               return  (statusOptions.indexOf(a.status) - statusOptions.indexOf(b.status))* sortOrder
-//                   } else if (
-//             sortBy === "createdAt"
-//         ) {
-//                 const timestampA = new Date(a.createdAt).getTime(); // Numero (es. 1672531200000)
-//                 const timestampB = new Date(b.createdAt).getTime();
-//                 return (timestampA - timestampB) * sortOrder;
-//         }
-
-// }) }, [tasks, sortBy, sortOrder])
-
-//useMemo: Reagisce al cambiamento di searchQuery filtrando/ordinando.
     const filteredAndSortedTasks = useMemo(() => {
-        // 1. Filtra i task basandoti su searchQuery (case insensitive)
         const filtered = tasks.filter(task =>
-            task.title.toLowerCase().includes(searchQuery.toLowerCase()) // Cerca nel titolo
-            || task.status.toLowerCase().includes(searchQuery.toLowerCase()) // Cerca nello status
+            task.title.toLowerCase().includes(searchQuery.toLowerCase()) 
+            || task.status.toLowerCase().includes(searchQuery.toLowerCase()) 
             || task.createdAt.toLocaleString().includes(searchQuery)
         );
-
-        // 2. Ordina i task filtrati (usa il tuo codice esistente)
         return [...filtered].sort((a, b) => {
-            if (sortBy === "title") return a.title.localeCompare(b.title) * sortOrder;
-            else if (sortBy === "status") /* ... */;
-            else if (sortBy === "createdAt") /* ... */;
+            if (sortBy === "title") {
+                return a.title.localeCompare(b.title) * sortOrder;
+            }else if (sortBy === "status")  {
+                const statusElems = ["To do", "Doing", "Done"]
+                return (statusElems.indexOf(a.status) - statusElems.indexOf(b.status))*sortOrder
+            }else if (sortBy === "createdAt"){
+                const timeA = new Date(a.createdAt).getTime()
+                const timeB = new Date(b.createdAt).getTime()
+                return (timeA - timeB)*sortOrder
+            };
         });
-    }, [tasks, searchQuery, sortBy, sortOrder]); // Dipendenze: tutte le variabili usate
-
+    }, [tasks, searchQuery, sortBy, sortOrder]); 
+    
     //const debounceSearch = debounce(setSearchQuery, 500)  non va bene perche viene ricreato ad ogni render e timer non e memorizzato
     
-    const debounceSetSearchQuery = useCallback(//callback da memorizzare e ricreare solo al cambio di dipendenze, vogliamo passare la funzione ritornata da debounce per salvarla
+    const debounceSetSearchQuery = useCallback(
         debounce((value) => 
             setSearchQuery(value), 
         300),[])
@@ -98,11 +70,9 @@ const TaskList = () => {
             <div>
                 <input type=""
                 placeholder='Search for the task'
-                    onChange={(e) => debounceSetSearchQuery(e.target.value)} />
+                onChange={(e) => debounceSetSearchQuery(e.target.value)} />
             </div>
             <table className='task-table'>
-                {/* ci dovra essere almeno una riga (tr) */}
-                {/* th rappresenta il nome della proprieta mostrata e intestazione nostra colonna */}
                 <thead>
                     <tr>
                         <th onClick={() => handleSorting("title")}>Name </th>
@@ -123,11 +93,3 @@ const TaskList = () => {
 }
 
 export default TaskList
-
-// Come puoi far capire alla funzione quale colonna è stata cliccata ?
-
-//Cosa succede se clicco più volte sulla stessa colonna ?
-
-//Come eviti di modificare l'array originale durante l'ordinamento ?
-
-//Come gestisci il caso in cui la colonna cliccata è diversa da quella attualmente ordinata ?

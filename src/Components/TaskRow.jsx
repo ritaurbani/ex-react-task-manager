@@ -11,7 +11,7 @@ const TaskRow = memo(({ task }) => { //riga non si ricrea se task all interno no
     return (
         
             <tr>
-                {/* //acceddo al task id che passo sopra */}
+                {/* //accedo al task id che passo sopra */}
                 <td> <Link to={`/task/${task.id}`}>{task.title}</Link> </td>
                 <td style={{backgroundColor: 
                     task.status === "To do"? "red"

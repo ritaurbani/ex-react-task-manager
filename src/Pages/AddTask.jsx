@@ -10,6 +10,7 @@ import { useRef } from 'react'
 // const isUserNameValid = useMemo(() => { /* logica */ }, [username]);
 // useMemo memorizza il risultato della funzione e lo assegna a isUserNameValid.
 // La funzione viene ricalcolata ad ogni render(anche se username non cambia).
+
 // Con useMemo invece, il calcolo avviene solo quando username cambia.
 const AddTask = () => {
     const {addTask} = useContext(GlobalContext)
@@ -29,10 +30,10 @@ const AddTask = () => {
 
     const symbols = "!@#$%^&*()-_=+[]{}|;:'\\,.<>?/`~";
 
-    //Se l'utente inserisce soli spazi in un campo, 
-    // il tuo primo codice lo considererebbe comunque valido:
-    //if (name) controlla solo che name non sia null, 
-    // undefined o "", ma non vede gli spazi come vuoti!
+    // const isTitleEmpty = !title.trim();
+    // const containsSymbols = title.split('').some(char => symbols.includes(char));
+    // const titleValid = !isTitleEmpty && !containsSymbols;
+
     const isTitleValid = () => {
         if (!title.trim()) {
             return false
@@ -43,10 +44,8 @@ const AddTask = () => {
         if (doesTitleContainSymbols) {
             return false
         }
-
         return true
     }
-
     const titleValid = isTitleValid()
 
     const handleSubmit = async (e) => {
@@ -72,8 +71,6 @@ const AddTask = () => {
             alert(error.message)
         }
     }
-
-
 
     return (
         <div>

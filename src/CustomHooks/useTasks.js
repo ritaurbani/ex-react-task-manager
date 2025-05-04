@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 
+
 const useTasks = () => {
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -37,7 +38,7 @@ const [tasks, setTasks] = useState([])
       //result e il nostro oggetto ritornato da BE con proprieta success per indicare operazione riuscito o meno
       const result = await response.json();//da testo json a obj
       if (!result.success) {
-      throw new Error(result.message); //throw interrompe funzione - Lanciamo l'errore con il messaggio
+      throw new Error(result.message); 
       }
      //se tutto a buon fine, prendi tutte task gia salvate e aggiungiamo nuova task
      setTasks(prev => [...prev, result.task])
@@ -56,7 +57,6 @@ const [tasks, setTasks] = useState([])
       setTasks(prev => prev.filter((task, i) => task.id !== taskId ))
     }
 
-    //RICEZIONE DATI INPUT - deve prendere l id della task modificata ed effettuare il put con tutto l oggetto
     const updateTask = async(updatedTask) => {//riceve un oggetto updatedTask
       const response = await fetch(`${apiUrl}/tasks/${updatedTask.id}`, {
         method: 'PUT',
@@ -71,7 +71,7 @@ const [tasks, setTasks] = useState([])
       //AGGIORNO STATO DOPO RISPOSTA - SE success is true aggiornare task in stato globale
       //per ogni task controlliamo se e uguale alla task ritornata dal server(stesso id), in quel caso 
       //sostituiamo la task esistente con la nuova versione (result.task)
-      //map ritorno nuovo array con qualche elemento modificato
+      //map ritorno nuovo array con qualche elemento modificato/aggiornato
       setTasks(prev => prev.map((t, i) => t.id ===result.task.id? result.task : t))
     }
 

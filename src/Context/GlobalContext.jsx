@@ -7,7 +7,13 @@ export const GlobalContext = createContext();//creo contesto accessibile da altr
 export function GlobalProvider({children}){//qualsiasi children che inserisco all interno di questo componente
    
     const taskOperations = useTasks();
-
+//       {
+//         tasks: [...],          
+//         setTasks: function,    
+//         addTask: function,    
+//         removeTask: function, 
+//         updateTask: function  
+//        }
 
     // const globalProviderValue = { tasks }
 
