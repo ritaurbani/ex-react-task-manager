@@ -20,7 +20,7 @@ function Modal({
             <div className='modal'>
                 <h2>{title}</h2>
                 {/* //puoi mettere content loose senza p */}
-                <p>{content}</p>
+                {content}
                 <div>
                     <button onClick={onClose}>Annulla</button>
                     <button onClick={onConfirm}>{confirmText}</button>
